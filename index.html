@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Card Maker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+    }
+    h2 { color: #ff4757; margin-bottom: 20px; }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #ff4757;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    button:hover { background: #e84118; }
+    .card-preview {
+      display: none;
+      margin-top: 20px;
+      border-top: 2px dashed #ff4757;
+      padding-top: 20px;
+    }
+    .uploaded-img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin: 15px 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    audio { width: 100%; margin-top: 15px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🎉 বার্থডে কার্ড মেকার 🎂</h2>
+  
+  <!-- Form to collect data -->
+  <div id="form-area">
+    <input type="text" id="name" placeholder="যার জন্মদিন তার নাম">
+    <textarea id="message" rows="3" placeholder="আপনার বিশেষ শুভেচ্ছা বার্তা..."></textarea>
+    
+    <label style="display:block; text-align:left; margin-top:10px; font-size:14px; color:#555;">ছবি সিলেক্ট করুন:</label>
+    <input type="file" id="imageInput" accept="image/*">
+    
+    <label style="display:block; text-align:left; margin-top:10px; font-size:14px; color:#555;">গান সিলেক্ট করুন (MP3):</label>
+    <input type="file" id="audioInput" accept="audio/*">
+    
+    <button onclick="generateCard()">কার্ড তৈরি করুন ✨</button>
+  </div>
+
+  <!-- Final Birthday Card -->
+  <div id="card" class="card-preview">
+    <h1 id="card-name" style="color:#ff4757;"></h1>
+    <img id="card-img" class="uploaded-img" src="" alt="Birthday Image" style="display:none;">
+    <p id="card-msg" style="font-size:16px; color:#333; line-height:1.5;"></p>
+    
+    <audio id="card-audio" controls style="display:none;"></audio>
+    
+    <button onclick="location.reload()" style="background:#70a1ff; margin-top:20px;">নতুন কার্ড তৈরি করুন</button>
+  </div>
+</div>
+
+<script>
+  function generateCard() {
+    const name = document.getElementById('name').value;
+    const message = document.getElementById('message').value;
+    const imageInput = document.getElementById('imageInput').files[0];
+    const audioInput = document.getElementById('audioInput').files[0];
+
+    if (!name || !message) {
+      alert("দয়া করে নাম এবং শুভেচ্ছা বার্তা লিখুন!");
+      return;
+    }
+
+    document.getElementById('card-name').innerText = "Happy Birthday, " + name + "! 🎉";
+    document.getElementById('card-msg').innerText = message;
+
+    // Handle Image Upload
+    if (imageInput) {
+      const imgReader = new FileReader();
+      imgReader.onload = function(e) {
+        const imgElement = document.getElementById('card-img');
+        imgElement.src = e.target.result;
+        imgElement.style.display = 'block';
+      }
+      imgReader.readAsDataURL(imageInput);
+    }
+
+    // Handle Audio Upload
+    if (audioInput) {
+      const audioReader = new FileReader();
+      audioReader.onload = function(e) {
+        const audioElement = document.getElementById('card-audio');
+        audioElement.src = e.target.result;
+        audioElement.style.display = 'block';
+        audioElement.play();
+      }
+      audioReader.readAsDataURL(audioInput);
+    }
+
+    document.getElementById('form-area').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
